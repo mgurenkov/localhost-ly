@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace LocalhostLy.Model.Data
 {
-    class DataContext : DbContext 
+    public class DataContext : DbContext  
     {
+        public DataContext()
+            : base("LocalhostLy")
+        {
+
+        }
+
         public DbSet<LinkData> Links { get; set; }
     }
 }
