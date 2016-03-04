@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LocalhostLy.Model.Data
 {
-    public class DataContext : DbContext  
+    class DataContext : DbContext  
     {
         public DataContext()
             : base("LocalhostLy")
