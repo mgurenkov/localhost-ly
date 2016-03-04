@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LocalhostLy.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,19 @@ namespace WebInterface.Controllers
         {
             Users.EnsureUserId();
             return View();
+        }
+
+        [Route("{link}")]
+        public ActionResult RedirectToOriginal(string Link)
+        {
+            var service = Registry.LinkService();
+            var link = service.Find(Link);
+
+            if (link == null) return HttpNotFound();
+
+            service.IncrementVisits(link.Id);
+            Response.Redirect(link.OriginalLink, true);
+            return Redirect(link.OriginalLink);
         }
     }
 }
