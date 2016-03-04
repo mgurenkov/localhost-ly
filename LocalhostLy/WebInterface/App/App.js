@@ -26,7 +26,22 @@ theApp.config(function ($stateProvider, $urlRouterProvider) {
 })
 
 theApp.controller('IndexController', function ($scope, $http) {
+    $scope.newUrl = '';
+    $scope.newLink = null;
+    $scope.error = null;
 
+    $scope.add = function () {
+        $scope.error = null;
+        $http.post('/api/links', {}, { params: { OriginalLink: $scope.newUrl } }).success(function (res) {
+            if (res.Result.HasErrors) {
+                $scope.newLink = null;
+                $scope.error = res.Result.AllErrors;
+                return;
+            }
+
+            $scope.newLink = res.Object;            
+        });
+    };
 });
 
 theApp.controller('LinksController', function ($scope, $http) {

@@ -2,22 +2,26 @@
     <h1>Сожми свой урл!</h1>
     
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="Введите адрес страницы">
+        <input type="text" class="form-control" placeholder="Введите адрес страницы" ng-model="newUrl">
         <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">Сжать!</button>
+            <button class="btn btn-primary" type="button" ng-click="add()">Сжать!</button>
         </span>
     </div>
 
     <br />
 
-    <div class="panel panel-default">
+    <div class="alert alert-danger" role="alert" ng-show="error">
+        {{error}}
+    </div>
+
+    <div class="panel panel-default" ng-show="newLink">
         <div class="panel-body">
             <div class="source">
-                Адрес <a> http://yandex.ru</a> сжат до
+                Адрес <a href="{{newLink.OriginalLink}}">{{newLink.OriginalLink}}</a> сжат до
             </div>
             <div class="result">
-                <a href="http://localhost/efdee">localhost/efdee</a>
-                <button class="btn btn-default btn-xs">Скопировать!</button>
+                <a href="http://localhost:35665/{{newLink.ShortLink}}">http://localhost:35665/{{newLink.ShortLink}}</a>
+                <!--<button class="btn btn-default btn-xs">Скопировать!</button>-->
             </div>
         </div>
     </div>
