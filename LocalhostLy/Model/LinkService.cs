@@ -74,7 +74,7 @@ namespace LocalhostLy.Model
                 db.Links.Add(link);
                 db.SaveChanges();
 
-                link.ShortLink = string.Format("l{0}", a_OriginalUrl.GetHashCode() ^ link.Id.GetHashCode());
+                link.ShortLink = string.Format("l{0}", Math.Abs(a_OriginalUrl.GetHashCode() ^ link.Id.GetHashCode()).ToString().Substring(0, 5));
                 db.SaveChanges();
 
                 return new CommandResult<LinkData>(link, r);
