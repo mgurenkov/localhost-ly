@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ThePlatform.Common.Execution;
 using ThePlatform.Core.Data;
+using EntityFramework.Extensions;
+using EntityFramework.Batch;
 
 namespace LocalhostLy.Model
 {
@@ -106,8 +108,17 @@ namespace LocalhostLy.Model
             using (var db = new DataContext())
             {
                 // статистика должна обновлять прямым запросом в базу данных, 
-                // иначе при работе через объектную модель между загрузкой данных и запросом на обновление кто-то еще может данные поменять.
-                db.Database.ExecuteSqlCommand("update Links set LinkNavigations = LinkNavigations + 1 where id = @p0", a_Id);
+                // иначе при работе через объектную модель между загрузкой данных и запросом на обновление кто-то еще может данные поменять.               
+                db.Links.Where(x => x.Id == a_Id).Update(l => new LinkData() { LinkNavigations = l.LinkNavigations + 1 });
+                db.SaveChanges();
+            }
+        }
+
+        public void RemoveLinkOfUser(Guid a_UserId)
+        {
+            using (var db = new DataContext())
+            {               
+                db.Links.Where(x => x.Author == a_UserId).Delete();                
             }
         }
     }
