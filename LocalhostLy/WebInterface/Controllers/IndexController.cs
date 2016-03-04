@@ -12,7 +12,7 @@ namespace WebInterface.Controllers
         [Route("")]
         public ActionResult Index()
         {
-            Users.EnsureUserId(this);
+            Users.EnsureUserId();
             return View();
         }
     }

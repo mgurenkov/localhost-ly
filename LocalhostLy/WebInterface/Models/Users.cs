@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace WebInterface.Models
@@ -18,11 +19,11 @@ namespace WebInterface.Models
         /// Проверить и установить куку с идентификатором пользователя
         /// </summary>
         /// <param name="a_Controller"></param>
-        public static void EnsureUserId(Controller a_Controller)
+        public static void EnsureUserId()
         {
-            if (a_Controller.Request.Cookies["UserId"] == null)
+            if (HttpContext.Current.Request.Cookies["UserId"] == null)
             {
-                a_Controller.Response.Cookies.Add(new HttpCookie("UserId", Guid.NewGuid().ToString())
+                HttpContext.Current.Request.Cookies.Add(new HttpCookie("UserId", Guid.NewGuid().ToString())
                 {
                     Expires = DateTime.Today.AddYears(1000),
                 });
@@ -34,9 +35,9 @@ namespace WebInterface.Models
         /// </summary>
         /// <param name="a_Controller"></param>
         /// <returns></returns>
-        public static Guid UserId(Controller a_Controller)
+        public static Guid UserId()
         {
-            var userCookie = a_Controller.Request.Cookies["UserId"];
+            var userCookie = HttpContext.Current.Request.Cookies["UserId"];
             if (userCookie == null || string.IsNullOrEmpty(userCookie.Value)) return Guid.Empty;
             return Guid.Parse(userCookie.Value);
         }
