@@ -1,7 +1,11 @@
 ﻿<div>
     <h1>Сжатые ссылки</h1>
 
-    <table class="table table-hover">
+    <div class="alert alert-info" role="alert" ng-if="links.length == 0">
+        Вы еще не создавали ссылок. Создайте ссылку <a href="/#/">здесь</a>.
+    </div>
+
+    <table class="table table-hover" ng-if="links.length > 0">
         <thead>
             <tr>
                 <th>Дата создания</th>
@@ -10,5 +14,13 @@
                 <th>Количество переходов</th>
             </tr>
         </thead>
+        <tbody>
+            <tr ng-repeat="link in links">
+                <td>{{link.CreatedAt | date: 'HH:mm dd.MM.yy'}}</td>
+                <td><a href="{{link.OriginalLink}}">{{link.OriginalLink}}</a></td>
+                <td><a href="http://localhost:35665/{{link.ShortLink}}">http://localhost:35665/{{link.ShortLink}}</a></td>
+                <td>{{link.LinkNavigations}}</td>
+            </tr>
+        </tbody>
     </table>
 </div>

@@ -45,5 +45,9 @@ theApp.controller('IndexController', function ($scope, $http) {
 });
 
 theApp.controller('LinksController', function ($scope, $http) {
+    $scope.links = null;
 
+    $http.get('/api/links').success(function (res) {
+        $scope.links = res;
+    });
 });
