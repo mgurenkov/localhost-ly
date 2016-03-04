@@ -69,12 +69,10 @@ namespace LocalhostLy.Model
                     CreatedAt = DateTime.Now,
                     LinkNavigations = 0,
                     OriginalLink = a_OriginalUrl,
+                    ShortLink = CreateShortLink(),
                 };
 
                 db.Links.Add(link);
-                db.SaveChanges();
-
-                link.ShortLink = string.Format("l{0}", Math.Abs(a_OriginalUrl.GetHashCode() ^ link.Id.GetHashCode()).ToString().Substring(0, 5));
                 db.SaveChanges();
 
                 return new CommandResult<LinkData>(link, r);
@@ -85,6 +83,38 @@ namespace LocalhostLy.Model
         bool ValidateUrl(string a_Url)
         {
             return m_UrlValidator.IsMatch(a_Url);
+        }
+
+        string CreateShortLink()
+        {
+            // for a 48-bit base, omits l/L, 1, i/I, o/O, 0
+            var map = new char[] {
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K',
+                'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+                'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+                'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't',
+                'u', 'v', 'x', 'y', 'z', '2', '3', '4',
+            };
+
+            var inp = Math.Abs(Guid.NewGuid().GetHashCode());
+
+            var b = map.Count();
+            // value -> character
+            var toChar = map.Select((v, i) => new { Value = v, Index = i }).ToDictionary(i => i.Index, i => i.Value);
+            var res = "";
+            if (inp == 0)
+            {
+                return "" + toChar[0];
+            }
+            while (inp > 0)
+            {
+                // encoded least-to-most significant
+                var val = (int)(inp % b);
+                inp = inp / b;
+                res += toChar[val];
+            }
+
+            return res;
         }
 
         public LinkData Find(string a_ShortLink)
@@ -117,8 +147,8 @@ namespace LocalhostLy.Model
         public void RemoveLinkOfUser(Guid a_UserId)
         {
             using (var db = new DataContext())
-            {               
-                db.Links.Where(x => x.Author == a_UserId).Delete();                
+            {
+                db.Links.Where(x => x.Author == a_UserId).Delete();
             }
         }
     }
