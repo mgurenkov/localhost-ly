@@ -48,8 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandResult.cs" />
     <Compile Include="Data\DataContext.cs" />
     <Compile Include="Data\LinkData.cs" />
+    <Compile Include="LinkService.cs" />
+    <Compile Include="OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
