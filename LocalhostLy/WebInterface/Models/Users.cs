@@ -23,7 +23,7 @@ namespace WebInterface.Models
         {
             if (HttpContext.Current.Request.Cookies["UserId"] == null)
             {
-                HttpContext.Current.Request.Cookies.Add(new HttpCookie("UserId", Guid.NewGuid().ToString())
+                HttpContext.Current.Response.Cookies.Add(new HttpCookie("UserId", Guid.NewGuid().ToString())
                 {
                     Expires = DateTime.Today.AddYears(1000),
                 });
